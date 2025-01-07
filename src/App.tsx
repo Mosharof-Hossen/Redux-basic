@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import Navbar from "./components/Layout/Navbar";
 import { Button } from "./components/ui/button";
 import { decrement, increment } from "./redux/features/counter/counterSlice";
@@ -19,6 +20,7 @@ function App() {
   return (
     <div>
       <Navbar></Navbar>
+      <Outlet></Outlet>
     </div>
   )
 }
