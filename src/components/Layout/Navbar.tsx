@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { Button } from "../ui/button";
+import { ModeToggle } from "../mode-toggle";
 
 const Navbar = () => {
     return (
@@ -11,9 +12,10 @@ const Navbar = () => {
                 </Link>
                 <span className="font-bold ml2">Task</span> Master
             </div>
-            <div className=" space-x-2">
+            <div className=" space-x-2 flex items-center">
                 <Link to={"/"}><Button>Tasks</Button></Link>
                 <Link to={"/users"}><Button>Users</Button></Link>
+                <ModeToggle></ModeToggle>
             </div>
         </nav>
     );
