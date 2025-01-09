@@ -21,19 +21,20 @@ import { CalendarIcon } from "lucide-react"
 import { Calendar } from "../../ui/calendar"
 import { format } from "date-fns"
 import { useAppDispatch } from "../../../redux/hook"
-import { addTask } from "../../../redux/features/task/taskSlice"
 import { TTask } from "../../../redux/features/task/task.interface"
 import { FaEdit } from "react-icons/fa"
+import { updateTask } from "../../../redux/features/task/taskSlice"
 
 type IProps = {
     task: TTask
 }
 export function EditTaskModal({ task }: IProps) {
-    console.log(task);
-    const form = useForm()
+    const form = useForm({
+        defaultValues:task
+    })
     const dispatch = useAppDispatch()
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        dispatch(addTask(data as TTask))
+        dispatch(updateTask(data as TTask))
     }
     return (
         <Dialog>
@@ -54,7 +55,7 @@ export function EditTaskModal({ task }: IProps) {
                                 <FormItem>
                                     <FormLabel />
                                     <FormControl>
-                                        <Input  placeholder="Title" {...field} value={task.title || ""}></Input>
+                                        <Input  placeholder="Title" {...field} value={field.value || ""}></Input>
                                     </FormControl>
                                 </FormItem>
                             )}

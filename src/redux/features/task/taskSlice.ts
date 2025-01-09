@@ -54,6 +54,10 @@ const taskSlice = createSlice({
         },
         selectedTaskForEdit: (state, action: PayloadAction<string>) => {
             state.selectedTask = state.tasks.find(task => task.id === action.payload) || null;
+        },
+        updateTask: (state, action) => {
+            console.log(action.payload);
+            state.tasks = state.tasks.map((task) => task.id === action.payload.id ? action.payload : task)
         }
     }
 })
@@ -66,6 +70,6 @@ export const selectedTask = (state: RootState) => {
     return state.todos.selectedTask
 }
 
-export const { addTask, toggleCompleteState, deleteTask, selectedTaskForEdit } = taskSlice.actions
+export const { addTask, toggleCompleteState, deleteTask, selectedTaskForEdit, updateTask } = taskSlice.actions
 
 export const taskReducer = taskSlice.reducer;
