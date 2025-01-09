@@ -1,46 +1,38 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { TTask } from "./task.interface";
 import { RootState } from "../../store";
+import { v4 as uuidv4 } from 'uuid';
 
 type InitialState = {
-    tasks: TTask[]
+    tasks: TTask[],
+    filter: "High" | "Medium" | "Low" | "ALL"
 }
 
 const initialState: InitialState = {
-    tasks: [
-        {
-            id: "01",
-            title: "This is title",
-            description: "This is description.",
-            dueDate: "2025-11",
-            isCompleted: false,
-            priority: "High"
-        },
-        {
-            id: "02",
-            title: "This is title",
-            description: "This is description.",
-            dueDate: "2025-11",
-            isCompleted: false,
-            priority: "Medium"
-        },
-        {
-            id: "03",
-            title: "This is title",
-            description: "This is description.",
-            dueDate: "2025-11",
-            isCompleted: false,
-            priority: "Low"
-        },
-    ]
+    tasks: [],
+    filter: 'ALL'
 }
+
+type TDraftTask = Pick<TTask, 'title' | "description" | "dueDate" | "priority">;
+const createTask = (taskData: TDraftTask): TTask => {
+    return { id: nanoid(), isCompleted: false, ...taskData };
+}
+
 const taskSlice = createSlice({
     name: "tasks",
     initialState,
-    reducers: {}
+    reducers: {
+        addTask: (state, action: PayloadAction<TDraftTask>) => {
+            const taskData = createTask(action.payload);
+            state.tasks.push(taskData);
+        }
+    }
 })
 
 export const selectTasks = (state: RootState) => {
     return state.todos.tasks
 }
+
+export const { addTask } = taskSlice.actions
+
 export const taskReducer = taskSlice.reducer;

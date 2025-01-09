@@ -7,6 +7,10 @@ export const store = configureStore({
         MyCounter: counterReducer,
         todos: taskReducer
     },
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
     // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger)
 })
 

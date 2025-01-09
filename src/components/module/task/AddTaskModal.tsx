@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { Button } from "../../ui/button"
 import {
     Dialog,
@@ -14,17 +14,21 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../../ui/form"
 import { Input } from "../../ui/input"
 import { Textarea } from "../../ui/textarea"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover"
 import { cn } from "../../../lib/utils"
 import { CalendarIcon } from "lucide-react"
 import { Calendar } from "../../ui/calendar"
 import { format } from "date-fns"
+import { useAppDispatch } from "../../../redux/hook"
+import { addTask } from "../../../redux/features/task/taskSlice"
+import { TTask } from "../../../redux/features/task/task.interface"
 
 export function AddTaskModal() {
     const form = useForm()
-    const onSubmit = (data) => {
-        console.log(data);
+    const dispatch = useAppDispatch()
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        dispatch(addTask(data as TTask))
     }
     return (
         <Dialog>
@@ -62,6 +66,28 @@ export function AddTaskModal() {
                                 </FormItem>
                             )}
                         />
+
+                        <FormField
+                            control={form.control}
+                            name="priority"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a Priority" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="High">High</SelectItem>
+                                            <SelectItem value="Medium">Medium</SelectItem>
+                                            <SelectItem value="Low">Low</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
                             name="dueDate"
@@ -98,30 +124,11 @@ export function AddTaskModal() {
                                             />
                                         </PopoverContent>
                                     </Popover>
-                                    
+
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a Priority" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="High">High</SelectItem>
-                                            <SelectItem value="Medium">Medium</SelectItem>
-                                            <SelectItem value="Low">Low</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormItem>
-                            )}
-                        />
+
                         <DialogFooter>
                             <Button type="submit" className="mt-5">Save changes</Button>
                         </DialogFooter>
