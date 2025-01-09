@@ -1,16 +1,34 @@
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { TTask } from "./task.interface";
 import { RootState } from "../../store";
-import { v4 as uuidv4 } from 'uuid';
 
 type InitialState = {
     tasks: TTask[],
-    filter: "High" | "Medium" | "Low" | "ALL"
+    filter: "High" | "Medium" | "Low" | "ALL",
+    selectedTask: TTask | null
 }
 
 const initialState: InitialState = {
-    tasks: [],
-    filter: 'ALL'
+    tasks: [
+        {
+            id: "sFoe2cRnGfG_16u8sCMWu",
+            isCompleted: false,
+            title: "This is title one",
+            description: "this is description",
+            priority: "High",
+            dueDate: "2025-01-20T18:00:00.000Z",
+        },
+        {
+            id: "sFoe2cRnGfG_16u8fsCMWu",
+            isCompleted: false,
+            title: "This is title two",
+            description: "this is description",
+            priority: "High",
+            dueDate: "2025-01-20T18:00:00.000Z",
+        }
+    ],
+    filter: 'ALL',
+    selectedTask: null,
 }
 
 type TDraftTask = Pick<TTask, 'title' | "description" | "dueDate" | "priority">;
@@ -25,14 +43,29 @@ const taskSlice = createSlice({
         addTask: (state, action: PayloadAction<TDraftTask>) => {
             const taskData = createTask(action.payload);
             state.tasks.push(taskData);
+        },
+        toggleCompleteState: (state, action: PayloadAction<string>) => {
+            console.log(action);
+            state.tasks.forEach((task: TTask) => task.id === action.payload ? (task.isCompleted = !task.isCompleted) : task);
+        },
+        deleteTask: (state, action: PayloadAction<string>) => {
+            console.log(action.payload);
+            state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+        },
+        selectedTaskForEdit: (state, action: PayloadAction<string>) => {
+            state.selectedTask = state.tasks.find(task => task.id === action.payload) || null;
         }
     }
 })
 
-export const selectTasks = (state: RootState) => {
+export const tasks = (state: RootState) => {
     return state.todos.tasks
 }
 
-export const { addTask } = taskSlice.actions
+export const selectedTask = (state: RootState) => {
+    return state.todos.selectedTask
+}
+
+export const { addTask, toggleCompleteState, deleteTask, selectedTaskForEdit } = taskSlice.actions
 
 export const taskReducer = taskSlice.reducer;
