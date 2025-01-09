@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { TUser } from "./user.interface";
 import { RootState } from "../../store";
 
@@ -9,12 +9,12 @@ type TInitialUser = {
 const initialState: TInitialUser = {
     users: [
         {
-            id:"dkfd",
-            name:"Mosharof Hossen"
+            id: "dkfd",
+            name: "Mosharof Hossen"
         },
         {
-            id:"dfkfd",
-            name:"Limon Hossen"
+            id: "dfkfd",
+            name: "Limon Hossen"
         },
     ]
 }
@@ -29,6 +29,9 @@ const userSlice = createSlice({
     reducers: {
         addUser: (state, action) => {
             state.users.push(createUser(action.payload));
+        },
+        deleteUser: (state, action: PayloadAction<string>) => {
+            state.users = state.users.filter((user => user.id !== action.payload))
         }
     }
 })
@@ -37,6 +40,6 @@ export const userList = (state: RootState) => {
     return state.users.users
 }
 
-export const {addUser} = userSlice.actions
+export const { addUser, deleteUser } = userSlice.actions
 
 export const userReducer = userSlice.reducer;
