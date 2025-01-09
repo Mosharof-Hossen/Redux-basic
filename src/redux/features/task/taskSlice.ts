@@ -23,7 +23,7 @@ const initialState: InitialState = {
             isCompleted: false,
             title: "This is title two",
             description: "this is description",
-            priority: "High",
+            priority: "Low",
             dueDate: "2025-01-20T18:00:00.000Z",
         }
     ],
@@ -55,21 +55,35 @@ const taskSlice = createSlice({
         selectedTaskForEdit: (state, action: PayloadAction<string>) => {
             state.selectedTask = state.tasks.find(task => task.id === action.payload) || null;
         },
-        updateTask: (state, action) => {
+        updateTask: (state, action: PayloadAction<TTask>) => {
             console.log(action.payload);
             state.tasks = state.tasks.map((task) => task.id === action.payload.id ? action.payload : task)
+        },
+        updateFilter: (state, action: PayloadAction<"High" | "Medium" | "Low" | "ALL">) => {
+            state.filter = action.payload
         }
     }
 })
 
 export const tasks = (state: RootState) => {
+    console.log(state);
+    if (state.todos.filter === "Low") {
+        return state.todos.tasks.filter((task) => task.priority === "Low")
+    }
+    else if (state.todos.filter === "Medium") {
+        return state.todos.tasks.filter((task) => task.priority === "Medium")
+    }
+    if (state.todos.filter === "High") {
+        return state.todos.tasks.filter((task) => task.priority === "High")
+    }
     return state.todos.tasks
 }
+
 
 export const selectedTask = (state: RootState) => {
     return state.todos.selectedTask
 }
 
-export const { addTask, toggleCompleteState, deleteTask, selectedTaskForEdit, updateTask } = taskSlice.actions
+export const { addTask, toggleCompleteState, updateFilter, deleteTask, selectedTaskForEdit, updateTask } = taskSlice.actions
 
 export const taskReducer = taskSlice.reducer;

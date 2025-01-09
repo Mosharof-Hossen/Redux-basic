@@ -24,11 +24,14 @@ import { useAppDispatch } from "../../../redux/hook"
 import { TTask } from "../../../redux/features/task/task.interface"
 import { FaEdit } from "react-icons/fa"
 import { updateTask } from "../../../redux/features/task/taskSlice"
+import { useState } from "react"
 
 type IProps = {
     task: TTask
 }
 export function EditTaskModal({ task }: IProps) {
+    const [isOpen, setIsOpen] = useState(false);
+
     const form = useForm({
         defaultValues:task
     })
@@ -37,9 +40,9 @@ export function EditTaskModal({ task }: IProps) {
         dispatch(updateTask(data as TTask))
     }
     return (
-        <Dialog>
+        <Dialog open = {isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <button className="m-0 p-0"><FaEdit></FaEdit></button>
+                <button onClick={()=>setIsOpen(true)} className="m-0 p-0"><FaEdit></FaEdit></button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -136,7 +139,7 @@ export function EditTaskModal({ task }: IProps) {
                         />
 
                         <DialogFooter>
-                            <Button type="submit" className="mt-5">Save changes</Button>
+                            <Button onClick={()=>setIsOpen(false)} type="submit" className="mt-5">Save changes</Button>
                         </DialogFooter>
                     </form>
 
