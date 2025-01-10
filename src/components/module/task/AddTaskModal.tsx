@@ -24,16 +24,20 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hook"
 import { addTask } from "../../../redux/features/task/taskSlice"
 import { TTask } from "../../../redux/features/task/task.interface"
 import { userList } from "../../../redux/features/user/userSlice"
+import { useState } from "react"
 
 export function AddTaskModal() {
+    const [open, setOpen] = useState(false);
     const form = useForm()
     const dispatch = useAppDispatch()
     const users = useAppSelector(userList);
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         dispatch(addTask(data as TTask))
+        setOpen(false);
+        form.reset();
     }
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">Add Task</Button>
             </DialogTrigger>
