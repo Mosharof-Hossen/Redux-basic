@@ -10,28 +10,12 @@ type InitialState = {
 
 const initialState: InitialState = {
     tasks: [
-        {
-            id: "sFoe2cRnGfG_16u8sCMWu",
-            isCompleted: false,
-            title: "This is title one",
-            description: "this is description",
-            priority: "High",
-            dueDate: "2025-01-20T18:00:00.000Z",
-        },
-        {
-            id: "sFoe2cRnGfG_16u8fsCMWu",
-            isCompleted: false,
-            title: "This is title two",
-            description: "this is description",
-            priority: "Low",
-            dueDate: "2025-01-20T18:00:00.000Z",
-        }
     ],
     filter: 'ALL',
     selectedTask: null,
 }
 
-type TDraftTask = Pick<TTask, 'title' | "description" | "dueDate" | "priority">;
+type TDraftTask = Pick<TTask, 'title' | "description" | "dueDate" | "priority" | "assignedTo">;
 const createTask = (taskData: TDraftTask): TTask => {
     return { id: nanoid(), isCompleted: false, ...taskData };
 }

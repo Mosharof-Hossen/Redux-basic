@@ -1,10 +1,11 @@
 import { cn } from "../../../lib/utils";
 import { TTask } from "../../../redux/features/task/task.interface";
-import { deleteTask, toggleCompleteState } from "../../../redux/features/task/taskSlice";
-import { useAppDispatch } from "../../../redux/hook";
+import { deleteTask, tasks, toggleCompleteState } from "../../../redux/features/task/taskSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hook";
 import { Checkbox } from "../../ui/checkbox";
-import {  FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { EditTaskModal } from "./EditTaskModal";
+import { userList } from "../../../redux/features/user/userSlice";
 
 type IProps = {
     task: TTask
@@ -12,6 +13,8 @@ type IProps = {
 
 const TaskCard = ({ task }: IProps) => {
     const dispatch = useAppDispatch();
+    const taskList = useAppSelector(userList);
+    const assignedUser = taskList.find(user => user.id === task.assignedTo)
     return (
         <div className="border px-5 py-3 rounded-md">
             <div className="flex justify-between items-center">
@@ -24,12 +27,15 @@ const TaskCard = ({ task }: IProps) => {
                     <h1 className={cn({ "line-through": task.isCompleted })}>{task.title}</h1>
                 </div>
                 <div className="flex gap-3 items-center">
-                    <EditTaskModal key={task.id} task = {task}></EditTaskModal>
+                    <EditTaskModal key={task.id} task={task}></EditTaskModal>
                     <FaRegTrashAlt className="cursor-pointer" onClick={() => dispatch(deleteTask(task.id))} />
                     <Checkbox checked={task.isCompleted} onClick={() => dispatch(toggleCompleteState(task.id))}></Checkbox>
                 </div>
             </div>
-            <p className="mt-5">{task.description}</p>
+            <div className="mt-3 space-y-2">
+                <p>Assign To - {assignedUser ? assignedUser.name : "No One"}</p>
+                <p >{task.description}</p>
+            </div>
         </div>
     );
 };

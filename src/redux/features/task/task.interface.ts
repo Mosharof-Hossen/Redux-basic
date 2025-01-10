@@ -4,5 +4,6 @@ export type TTask = {
     description: string,
     dueDate: string,
     isCompleted: boolean,
-    priority: "High" | "Medium" | "Low"
+    priority: "High" | "Medium" | "Low";
+    assignedTo: string | null
 }
